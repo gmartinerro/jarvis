@@ -1,6 +1,9 @@
 # Jarvis
 
-![](docs/logo.jpg)
+<p align="center">
+  <img src="docs/logo.jpg">
+</p>
+
 
 ## Introduction
 
