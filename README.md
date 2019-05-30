@@ -1,4 +1,4 @@
-# A.I for restaurants
+# Jarvis
 
 [![Watch the video](docs/Client_snapshot.png)](https://youtu.be/tHlimifU0d0)
 
