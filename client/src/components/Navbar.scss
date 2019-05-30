@@ -1,0 +1,68 @@
+@import '../globals.scss';
+
+.Navbar {
+    width: 100%;
+    height: $navbarHeight;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: $navbarBackgroundColor;
+    color: $navbarOptionsColor;
+    padding: 7px;
+    box-sizing: border-box;
+
+    .logo {
+        width: 100px;
+        display: block;
+        opacity: 0.9;
+
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    // Nav bar options
+    ul.navbar-options {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        //flex: 1 1 60%;
+        flex-direction: row;
+        flex-wrap: no-wrap;
+        align-items: center;
+        order: 2;
+        font-family: $headlineFont;
+
+        list-style: none;
+        height: 50px;
+        font-size: 100%;
+        margin: 0px;
+        padding: 0px;
+
+        a {
+            color: unset;
+            text-decoration: unset;
+        }
+
+        li {
+            cursor: pointer;
+            padding: 0px 7px;
+
+            &:hover {
+                color: $navbarOptionsHoverColor;
+            }
+
+            &.caret:after {
+                content: $icon-dropdown;
+                font-family: 'icons';
+                padding-left: 5px;
+                font-size: 80%;
+            }
+        }
+    }
+}

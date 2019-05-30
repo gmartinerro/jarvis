@@ -1,0 +1,95 @@
+@import './globals.scss';
+
+body {
+  margin: 0px;
+  background-color: #f2f2f2;
+  font-family: $mainFont;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .app-content {
+    min-height: $minContentHeight;
+    padding: 20px;
+    box-sizing: border-box;
+    flex: 1 0 auto;
+  }
+
+  // Size adjustments for fixed-navbar option
+  &.fixed-navbar {
+    .app-content {
+      min-height: $minContentHeightForFixedNavbar;
+      padding: 124px 20px 20px 20px;
+    }
+
+    .Breadcrumbs {
+      position: fixed;
+      top: $navbarHeight;
+      left: 0px;
+      z-index: 10;
+    }
+
+    .Navbar {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      z-index: 10;
+    }
+  }
+}
+
+
+.select-css {
+  display: inline-block;
+  font-size: 14px;
+  font-family: sans-serif;
+  color: $mainColor;
+  line-height: 1.2;
+  padding: .6em 1.8em .4em .8em;
+  box-sizing: border-box;
+  margin: 0;
+  border: 0px;
+  border-bottom: 2px solid transparent;
+  //box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+  border-radius: 0em;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='448' height='448' viewBox='0 0 448 448'%3E%3Cpath d='M420.75 202l-185.5 185.25c-6.25 6.25-16.25 6.25-22.5 0l-185.5-185.25c-6.25-6.25-6.25-16.5 0-22.75l41.5-41.25c6.25-6.25 16.25-6.25 22.5 0l132.75 132.75 132.75-132.75c6.25-6.25 16.25-6.25 22.5 0l41.5 41.25c6.25 6.25 6.25 16.5 0 22.75z' fill='rgb(85,85,85)'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+
+  &:hover {
+    border-bottom: 2px solid transparentize($hlColor, 0.5);
+    color: $hlColor;
+    background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='448' height='448' viewBox='0 0 448 448'%3E%3Cpath d='M420.75 202l-185.5 185.25c-6.25 6.25-16.25 6.25-22.5 0l-185.5-185.25c-6.25-6.25-6.25-16.5 0-22.75l41.5-41.25c6.25-6.25 16.25-6.25 22.5 0l132.75 132.75 132.75-132.75c6.25-6.25 16.25-6.25 22.5 0l41.5 41.25c6.25 6.25 6.25 16.5 0 22.75z' fill='rgb(0,103,190)'%3E%3C/path%3E%3C/svg%3E");
+  }
+
+  cursor:pointer;
+}
+
+.select-css::-ms-expand {
+  display: none;
+}
+
+.select-css:focus {
+  border-bottom: 2px solid transparentize($hlColor, 0.5);
+  color: $hlColor;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='448' height='448' viewBox='0 0 448 448'%3E%3Cpath d='M420.75 202l-185.5 185.25c-6.25 6.25-16.25 6.25-22.5 0l-185.5-185.25c-6.25-6.25-6.25-16.5 0-22.75l41.5-41.25c6.25-6.25 16.25-6.25 22.5 0l132.75 132.75 132.75-132.75c6.25-6.25 16.25-6.25 22.5 0l41.5 41.25c6.25 6.25 6.25 16.5 0 22.75z' fill='rgb(0,103,190)'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.select-css option {
+  font-weight: normal;
+}
+
+.jarvis-icon {
+  width: 70px;
+  margin: 10px auto;
+  opacity: 0.6;
+}

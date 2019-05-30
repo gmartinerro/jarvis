@@ -1,0 +1,63 @@
+@import '../globals.scss';
+
+.BigNumber {
+    font-size: 220%;
+    color: $hlColor;
+    margin: 15px 0px 0px;
+    font-weight: bold;
+
+    span.bignumber-decimal {
+        font-size: 90%
+    }
+
+    span.bignumber-units {
+        font-size: 60%;
+        margin-left: 0.1em;
+        font-weight: normal;
+    }
+}
+
+.BigTrends {
+    font-size: 220%;
+    color: $hlColor;
+    margin: 15px 0px;
+    font-weight: bold;
+
+    &.bigtrends-positive {
+        color: $positiveColor;
+
+        &:before {
+            content: $icon-caret-up;
+            font-family: 'icons';
+            margin-right: 5px;
+        }
+    }
+
+    &.bigtrends-zero {
+        color: $positiveColor;
+
+        &:before {
+            content: '~';
+            margin-right: 5px;
+        }
+    }
+
+
+    &.bigtrends-negative {
+        color: $negativeColor;
+
+        &:before {
+            content: $icon-caret-down;
+            font-family: 'icons';
+            margin-right: 5px;
+        }
+    }
+
+    span.bigtrends-units {
+        font-size: 60%;
+        margin-left: 0.1em;
+        font-weight: normal;
+    }
+
+
+}

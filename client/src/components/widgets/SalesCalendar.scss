@@ -1,0 +1,135 @@
+@import '../../globals.scss';
+
+//$cellColor: darken($hlColor, 20%);
+$cellColor: rgb(0, 40, 80);
+$cellMargin: 1px;
+$cellSize: 14px;
+$cellBorderColor: rgb(33, 33, 33);
+$selectionBorderColor: white;
+$emptyCellColor: rgba(128, 128, 128, 0.3);
+$maxWeeks:52;
+
+@mixin month-offsets {
+    @for $i from 0 through $maxWeeks - 1 {
+        .offset-#{$i} {
+            left: ($cellSize + 2*$cellMargin) * $i;
+        }
+    }
+}
+
+.SalesCalendar {
+
+    width: 560px;
+    margin: 10px auto;
+    @include month-offsets;
+
+    .level-0 {
+        background-color: lighten($cellColor, 65%);
+    }
+
+    .level-1 {
+        background-color: lighten($cellColor, 50%);
+    }
+
+    .level-2 {
+        background-color: lighten($cellColor, 30%);
+    }
+
+    .level-3 {
+        background-color: lighten($cellColor, 15%);
+    }
+
+    .level-4 {
+        background-color: $cellColor;
+    }
+
+    .sales-calendar-legend {
+        position: relative;
+        width: 100%;
+        right: 15px;
+        text-align: right;
+        margin-top: 10px;
+
+        .cell {
+            display: inline-block;
+            width: $cellSize;
+            height: $cellSize;
+            margin: 0px;
+            border: $cellMargin solid white;
+            box-sizing: content-box;
+        }
+
+        .sales-calendar-legend-label {
+            font-size: 80%;
+            vertical-align: text-top;
+            margin: 0px 5px;
+            color: lighten($mainColor, 0.5);
+        }
+    }
+
+
+    .sales-calendar-months-row {
+        height: $cellSize + 2* $cellMargin;
+        padding: $cellMargin;
+        box-sizing: border-box;
+        text-align: left;
+        margin-left: $cellSize + 4*$cellMargin;
+        position: relative;
+
+        .sales-calendar-month {
+            font-size: 11px;
+            display: inline-block;
+            position: absolute;
+            top: 0px;
+            color: $mainColor;
+        }
+    }
+
+    .sales-calendar-row {
+        height: $cellSize + 2* $cellMargin;
+        padding: $cellMargin;
+        box-sizing: border-box;
+        text-align: left;
+
+        .sales-calendar-row-wday {
+            width: $cellSize;
+            height: $cellSize;
+            font-size: 12px;
+            display: inline-block;
+            margin: $cellMargin;
+            box-sizing: border-box;
+            position: relative;
+            top: -2px;
+            color: $mainColor;
+            text-align: center;
+        }
+    }
+
+    .sales-calendar-cell {
+        width: $cellSize;
+        height: $cellSize;
+        margin: 0px;
+        border: $cellMargin solid $cellBorderColor;
+        box-sizing: content-box;
+        display: inline-block;
+        cursor: pointer;
+
+        &:not(.empty-cell):not(.selected):hover {
+            border: $cellMargin solid $selectionBorderColor;
+            transition: border-color .2s linear;
+        }
+
+        &.selected {
+            border: $cellMargin solid $selectionBorderColor;
+            cursor: default;
+        }
+
+
+        &.empty-cell {
+            border-color: $emptyCellColor;
+            background-color: $emptyCellColor;
+            cursor: not-allowed;
+        }
+    }
+
+}

@@ -1,0 +1,81 @@
+@import '../../globals.scss';
+
+
+.ForecastLineChart {
+
+    .prediction-chart-current-values {
+
+        text-align: left;
+        margin-left: 50px;
+        width: calc(100% - 70px);
+        padding: 5px;
+        border-bottom: 2px solid $mainllColor;
+
+        .prediction-chart-label {
+            display: inline-block;
+            color: $mainlColor;
+            font-size: 80%;
+            font-weight: bold;
+        }
+
+        .prediction-chart-value {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 107%;
+            margin-left: 10px;
+            color: $hlColor;
+            margin-right: 26px;
+
+            &.forecast {
+                color: $forecastColor;
+            }
+        }
+
+        .prediction-chart-date {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 107%;
+            width: 130px;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: $hlColor;
+        }
+
+    }
+
+
+    .d3-chart {
+        .point {
+            fill: none;
+            stroke-width: 3;
+            stroke: transparent;
+            cursor: pointer;
+            transition: stroke 1s;
+
+            &:hover {
+                fill: white;
+                stroke: $hlColor;
+                transition: stroke 0s;
+            }
+
+        }
+
+        .median-line {
+            fill: none;
+            stroke-width: 2;
+            stroke: $hlColor;
+            cursor: pointer;
+        }
+
+        .forecast-line {
+            fill: none;
+            stroke-width: 2;
+            stroke: $forecastColor;
+            opacity: 0.7;
+            cursor: pointer;
+            stroke-dasharray: 4 4;
+        }
+
+    }
+
+}

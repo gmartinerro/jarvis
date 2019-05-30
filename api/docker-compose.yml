@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  mysql-db:
+    image: 'mysql:5.7'
+    ports: 
+      - "33060:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=kschool
+      - MYSQL_DATABASE=aifrdb
+
+  api:
+    build: .
+    #image: 'airapi:latest'
+    ports:
+      - "5000:5000"
+    environment:
+      - MYSQL_DATABASE=aifrdb
+      - MYSQL_PORT=3306
+      - MYSQL_HOST=mysql-db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=kschool
+

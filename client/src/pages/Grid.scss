@@ -1,0 +1,126 @@
+@import '../globals.scss';
+
+.Grid {
+    display: flex;
+    flex-direction: column;
+
+    .grid-row {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+
+        .grid-cell-12 {
+            flex-basis: 100%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-11 {
+            flex-basis: 91.66667%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-10 {
+            flex-basis: 83.33333%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-9 {
+            flex-basis: 75%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-8 {
+            flex-basis: 66.66667%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-7 {
+            flex-basis: 58.33333%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-6 {
+            flex-basis: 50%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-5 {
+            flex-basis: 41.66667%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-4 {
+            flex-basis: 33.333333%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-3 {
+            flex-basis: 25%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-2 {
+            flex-basis: 16.66667%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell-1 {
+            flex-basis: 8.33333%;
+            padding-right: 5px;
+            padding-left: 5px;
+            box-sizing: border-box;
+        }
+
+        .widget {
+            border-radius: 0.3em;
+            border: 2px solid #ddd;
+            background-color: white;
+            min-height: 200px;
+            padding: 5px;
+
+            .widget-title {
+                font-size: 90%;
+                color: #666;
+                margin-top: 0.2em;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: bold;
+                font-family: $headlineFont;
+            }
+
+            p {
+                b {
+                    color: $hlColor;
+                }
+            }
+        }
+
+        &.half {
+            .widget {
+                min-height: 80px;
+            }
+        }
+    }
+}

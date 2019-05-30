@@ -1,0 +1,10 @@
+@import '../globals.scss';
+
+footer {
+    width: 100%;
+    min-height: $minFooterHeight;
+    background-color: $footerBackgroundColor;
+    color: $footerColor;
+    padding: 10px;
+    box-sizing: border-box;
+}

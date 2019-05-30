@@ -1,0 +1,61 @@
+@import 'fonts/variables.scss';
+
+
+/*
+     Global font specs
+*/
+$fontSize: 14px;
+$mainFont: Roboto;
+$headlineFont: Raleway;
+
+/*
+     Global app colors
+*/
+$bataviaBlue: rgb(0, 103, 190);
+$hlColor: $bataviaBlue;
+$hllColor: lighten($hlColor, 40%);
+$hldColor: darken($hlColor, 20%);
+
+$mainColor: #555;
+$mainlColor: lighten($mainColor, 20%);
+$mainllColor: lighten($mainColor, 50%);
+$maindColor: darken($mainColor, 20%);
+
+$forecastColor: rgba(0, 190, 190, 1);
+
+$notificationBackgroundColor: $hldColor;
+$notificationColor: $hllColor;
+
+$positiveColor: rgb(0, 128, 0);
+$negativeColor: rgb(128, 0, 0);
+
+
+
+/*
+     Navbar
+*/
+$navbarHeight: 64px;
+$navbarBackgroundColor: $hlColor;
+$navbarOptionsColor: $hllColor;
+$navbarOptionsHoverColor: white;
+
+/*
+     Footer
+*/
+$minFooterHeight: 30px;
+$footerBackgroundColor: $hldColor;
+$footerColor: $hllColor;
+
+/*
+     Breadcrumbs
+*/
+$breadcrumbsHeight: 32px;
+
+/*
+     Content
+*/
+// This size is for a standard navbar/ breadcrumbs with no fixed position
+$minContentHeight: calc(100vh - #{$navbarHeight+$breadcrumbsHeight+$minFooterHeight});
+
+// This size is for a navbar and breadcrumbs with fixed position
+$minContentHeightForFixedNavbar: calc(100vh - #{$minFooterHeight});
