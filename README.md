@@ -1,6 +1,6 @@
 # Jarvis
 
-[![](docs/logo.jpg)]
+![](docs/logo.jpg)
 
 ## Introduction
 
