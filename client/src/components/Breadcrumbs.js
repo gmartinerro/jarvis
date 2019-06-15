@@ -8,7 +8,7 @@ const PAGES = {'/':'Dashboard','/customers':'Clientes'}
 
 
 class Breadcrumbs extends Component {
-  state = { start: '2018-09-21', end: '2019-03-15' };
+  state = { start: '2018-09-21', end: '2019-04-30' };
 
   componentDidMount() {
     this.props.setCurrentDates(this.state);
@@ -60,7 +60,8 @@ class Breadcrumbs extends Component {
             <option value="2019-01-01">ENE 2019</option>
             <option value="2019-02-01">FEB 2019</option>
             <option value="2019-03-01">MAR 2019</option>
-            <option value="2019-03-15">FIN</option>
+            <option value="2019-04-01">ABR 2019</option>
+            <option value="2019-04-30">FIN</option>
           </select>
         </form>
       </div>

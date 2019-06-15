@@ -14,7 +14,6 @@ class DailyProfileChart extends Component {
   }
 
   componentDidUpdate() {
-    console.log("UPDATE DP", this.props)
     this.updateChart();
   }
 
@@ -36,9 +35,20 @@ class DailyProfileChart extends Component {
                    .ticks(5);
 
     // Create data line with real data
-    this.medianLine = d3.area()
+    this.patternLine = d3.line()
+                        .x((d,i) => this.scaleX(i))
+                        .y(d => this.scaleY(d.median))
+                        .curve(d3.curveMonotoneX);
+
+    this.medianLine = d3.line()
                         .x((d,i) => this.scaleX(i))
                         .y(d => this.scaleY(d))
+                        .curve(d3.curveMonotoneX);
+
+    this.bandsArea = d3.area()
+                        .x((d,i) => this.scaleX(i))
+                        .y0(d => this.scaleY(d.upper))
+                        .y1(d => this.scaleY(d.lower))
                         .curve(d3.curveMonotoneX);
   }
 
@@ -67,15 +77,14 @@ class DailyProfileChart extends Component {
         .attr('y', -10)
         .attr('x', 0)
 
+    svg.append('g').attr('class','bands').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+    svg.append('g').attr('class','pattern').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
     svg.append('g').attr('class','path').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
     svg.append('g').attr('class','markers').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
-    let initData = [];
+    let initData = this.props.dailyProfile.tickets.map(()=>0);
+    let initBands = this.props.dailyProfile.tickets.map(()=>({upper:0, median:0,lower:0}));
     
-    for (let i in this.props.dailyProfile.tickets){
-       initData[i] = 0;
-    }
-
     let path = svg.select('g.path')
       .selectAll('.median-line')
       .data([initData]);
@@ -85,6 +94,28 @@ class DailyProfileChart extends Component {
         .attr('class', 'median-line')
         .attr('d', this.medianLine)
         .attr('clip-path', 'url(#rect-clip'+this.props.id+')')
+
+    let pattern = svg.select('g.pattern')
+        .selectAll('.pattern-line')
+        .data([initBands]);
+  
+    pattern.enter()
+          .append('path')
+          .attr('class', 'pattern-line')
+          .attr('d', this.patternLine)
+          .attr('clip-path', 'url(#rect-clip'+this.props.id+')')
+  
+
+    let bands = svg.select('g.bands')
+        .selectAll('.bands-line')
+        .data([initBands]);
+  
+    bands.enter()
+          .append('path')
+          .attr('class', 'bands-line')
+          .attr('d', this.bandsArea)
+          .attr('clip-path', 'url(#rect-clip'+this.props.id+')')
+  
 
     svg.select('g.markers')
       .selectAll(".point")
@@ -111,14 +142,10 @@ class DailyProfileChart extends Component {
     if (!this.svg)
       this.drawChart();
 
-    // if (this.stateSignature === this.state.signature)
-    //    return;
-      
-    // this.stateSignature = this.state.signature;
     this.dates = this.props.dates;
 
     let maxData = d3.max(this.props.dailyProfile,(d)=>d) || 1000;    
-    maxData = 30;
+    maxData = 40;
     this.scaleY.domain([0, maxData]);
 
     this.svg.select('.y.axis').transition().duration(40).call(this.yAxis);
@@ -133,14 +160,53 @@ class DailyProfileChart extends Component {
     path.transition().duration(450)      
     .attr('d', this.medianLine);
 
+    
+    let pattern = null;
+    if (this.props.dailyPattern){
+      pattern = this.props.dailyPattern.stats.profile.map(
+        d => {return ({upper:d[1].median + d[1].iqr * 1.5, 
+                       median: d[1].median,
+                       lower:d[1].median - d[1].iqr * 1.5})}
+      )
+
+      let bands = this.svg.select('g.bands')
+      .selectAll('.bands-line')
+      .data([pattern]);
+
+      bands.transition().duration(450)      
+      .attr('d', this.bandsArea);
+
+
+      let patpath = this.svg.select('g.pattern')
+      .selectAll('.pattern-line')
+      .data([pattern]);
+
+      patpath.transition().duration(450)      
+      .attr('d', this.patternLine);
+
+    }
+
     this.svg.select('g.markers')
      .selectAll('.point')
      .data(this.props.dailyProfile.tickets)
      .transition().duration(450)
      .on('start',function() {d3.select(this).attr("r", 5)})
      .attr('cy',d => this.scaleY(d))
-     .on('end',function() {d3.select(this).attr("r", 4)})
+     .on('end',function(d,i){
+        if (pattern && d > pattern[i].upper){
+          d3.select(this).attr("r", 5);
+          d3.select(this).attr("class", 'point outlier');
+        }else{
+          d3.select(this).attr("r", 4);
+          d3.select(this).attr("class", 'point');
+        }
+      })
   }
+
+  renderBands(){
+
+  }
+  
 
   handleMouseOver(d){
       // const current = {date:d3.timeFormat('%d/%m/%Y')(d.date), wday:d3.timeFormat('%w')(d.date),orders:d.orders,forecast:parseFloat(d.forecast).toFixed(2),sol:d.sol,trafico:d.t1}
@@ -177,7 +243,7 @@ class DailyProfileChart extends Component {
 
 
 const mapStateToProps = state =>{
-  return {dailyProfile: state.dailyProfile};
+  return {dailyProfile: state.dailyProfile, dailyPattern: state.dailyPattern};
 }  
 
 

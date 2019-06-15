@@ -3,6 +3,8 @@ from flask_cors import CORS
 from flask_restplus import Resource, Api
 import json
 from database import *
+import datetime
+import decimal
 
 #########################################################
 #                UTILITY FUNCTIONS                      #
@@ -11,7 +13,9 @@ from database import *
 
 def JsonEncoder(obj):
     if isinstance(obj, datetime.datetime):
-        return obj.___str___()
+        return obj.__str__()
+    if isinstance(obj, datetime.date):
+        return obj.strftime("%Y-%m-%d")
     if isinstance(obj, decimal.Decimal):
         return str(obj)
     return obj
@@ -32,6 +36,8 @@ api.json_encoder = JsonEncoder
 #########################################################
 #                       ROUTES                          #
 #########################################################
+
+
 @api.route('/dayprofile/<start>/<end>', endpoint='dayprofile')
 @api.doc(params={'start': 'The starting date in ISO format (%Y-%m-%d) to get profiling info from', 'end': 'The ending date in ISO format (%Y-%m-%d) to get profiling info from'})
 class DayProfile(Resource):
@@ -63,6 +69,47 @@ class Summary(Resource):
     def get(self, start, end):
         data = getOrdersData()
         return json.loads(json.dumps({"summary": data}, default=JsonEncoder))
+
+
+@api.route('/customers/offline/<start>/<end>', endpoint='offline')
+@api.doc(params={'start': 'The staring date in ISO format (%Y-%m-%d) to get offline customers info from', 'end': 'The ending date in ISO format (%Y-%m-%d) to get offline customers info from'})
+class Summary(Resource):
+    def get(self, start, end):
+        data = getOfflineCustomersData(start, end)
+        return json.loads(json.dumps({"offline": data}, default=JsonEncoder))
+
+
+@api.route('/customers/online/<start>/<end>', endpoint='online')
+@api.doc(params={'start': 'The staring date in ISO format (%Y-%m-%d) to get offline customers info from', 'end': 'The ending date in ISO format (%Y-%m-%d) to get offline customers info from'})
+class Summary(Resource):
+    def get(self, start, end):
+        data = getOnlineCustomersData(start, end)
+        return json.loads(json.dumps({"online": data}, default=JsonEncoder))
+
+
+@api.route('/customers/recurrency/<start>/<end>', endpoint='recurrency')
+@api.doc(params={'start': 'The staring date in ISO format (%Y-%m-%d) to get offline customers info from', 'end': 'The ending date in ISO format (%Y-%m-%d) to get offline customers info from'})
+class Summary(Resource):
+    def get(self, start, end):
+        data = getRecurrencyData(start, end)
+        return json.loads(json.dumps(data, default=JsonEncoder))
+
+
+@api.route('/customers/rfm', endpoint='rfm')
+class Summary(Resource):
+    def get(self):
+        data = getRFMData()
+        return json.loads(json.dumps(data, default=JsonEncoder))
+
+
+@api.route('/daystats/<start>/<end>', defaults={'weekday': None})
+@api.route('/daystats/<start>/<end>/<weekday>', endpoint='daystats')
+@api.doc(params={'start': 'The starting date in ISO format (%Y-%m-%d) to get profiling info from', 'end': 'The ending date in ISO format (%Y-%m-%d) to get profiling info from'})
+class DayProfileStats(Resource):
+    def get(self, start, end, weekday):
+        heatmap = getHeatmap()
+        stats = getDayProfileStats(start, end, weekday)
+        return json.loads(json.dumps({'heatmap': heatmap, 'stats': stats}, default=JsonEncoder))
 
 
 #########################################################

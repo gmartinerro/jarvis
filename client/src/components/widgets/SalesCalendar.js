@@ -2,64 +2,69 @@ import React, {Component} from 'react';
 import './SalesCalendar.scss';
 import {connect} from 'react-redux';
 import { getDailyProfile } from '../../actions'
-import HEATMAP from './heatmap.json'
-
-
 
 class SalesCalendar extends Component {
 
-    state = {selection: null, heatmap:null};
+    state = {selection: null};
+    heatmap = null;
 
-    componentDidMount(){        
-        let heatmap = [{},{},{},{},{},{},{}]
+    componentDidMount(){
+    }
+
+    componentDidUpdate(){
+    }
+
+    setupHeatmap(){
+        this.heatmap = [{},{},{},{},{},{},{}]
         let minWeek= 104, maxWeek=1;
-        
-        for (const i in HEATMAP){
-            const row = HEATMAP[i]
+                
+        let outlierKeys = Object.create(null);
+        for (let outlier of this.props.dailyPattern.stats.outliers){
+            
+            if (!outlierKeys[outlier[0]])
+                outlierKeys[outlier[0]] = [outlier[1]]
+            else
+                outlierKeys[outlier[0]].push(outlier[1]);
+        }
+
+        for (const row of this.props.dailyPattern.heatmap){
             if (minWeek > row.week)
                 minWeek = row.week;
             if (maxWeek < row.week)
                 maxWeek = row.week;
 
-            heatmap[row.wday][row.week] = row
+            if(outlierKeys[row.date]){
+                row.outlier = outlierKeys[row.date];
+            }
+
+            this.heatmap[row.wday][row.week] = row;
         }
 
-        for (let wday in heatmap){
-            if (!heatmap[wday][minWeek]){
-                heatmap[wday][minWeek] = null;
+        for (let day of this.heatmap){
+            if (!day[minWeek]){
+                day[minWeek] = null;
             }
-            if (!heatmap[wday][maxWeek]){
-                heatmap[wday][maxWeek] = null;
+            if (!day[maxWeek]){
+                day[maxWeek] = null;
             }
         }
-
-        this.setState({selection: null, heatmap:heatmap, dates: null});
-    }
-
-
-    componentDidUpdate(){
-        console.log("CDU");
-        
-        if (this.state.dates !== this.props.dates)
-            this.setState({...this.state,selection:null, dates:this.props.dates});
     }
 
     renderMonths(){
         const monthNames = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
         let offset = 0;
-        let offsets = [];
         let mon = null;
         
-        if (!this.state.heatmap)
+        if (!this.heatmap)
             return '';
 
         // Get the second month, to avoid overlapping at the start (it mey not be room enough to place the label)
-        for(let i in this.state.heatmap[0]){
-            const day = this.state.heatmap[0][i]; 
+        for(let i in this.heatmap[0]){
+            const day = this.heatmap[0][i]; 
             if (mon == null && day!=null)
                 mon = day.mon;
-            if (mon != null && day !=null && day.mon > mon){
+            if (mon != null && day !=null && day.mon !== mon){
                 mon = day.mon
                 break;
             }
@@ -68,7 +73,7 @@ class SalesCalendar extends Component {
         
         mon = null;
         let months = []
-        const weeksArray = Object.values(this.state.heatmap[0]);
+        const weeksArray = Object.values(this.heatmap[0]);
         for (let i=offset; i < weeksArray.length; i++){
             const day = weeksArray[i];
             if (day.mon !== mon){
@@ -76,8 +81,6 @@ class SalesCalendar extends Component {
                 months.push({month:monthNames[(mon-1)%12], offset: i});
             }
         }
-
-        console.log(offsets);
 
         return (
         <div className={`sales-calendar-months-row`}>
@@ -97,10 +100,10 @@ class SalesCalendar extends Component {
         let key = 0;
         let weekDays = ['L','M','X','J','V','S','D'];
 
-        if (!this.state.heatmap)
+        if (!this.heatmap)
             return null;
 
-        return this.state.heatmap.map((row,i)=>{
+        return this.heatmap.map((row,i)=>{
             key ++;
             return <div className='sales-calendar-row' key={'wday' + key}><div className='sales-calendar-row-wday'>{weekDays[i]}</div>{this.renderHeatmapRow(row)}</div>
         });
@@ -112,7 +115,8 @@ class SalesCalendar extends Component {
             key++;
             if (cell){
                 const selected = (cell.date === this.state.selection) ? 'selected' : ''
-                return (<div className={`sales-calendar-cell level-${cell.level}  ${selected}`} key={key} onClick={(e)=>this.selectDay(e,cell)}></div>)
+                const outlier = (cell.outlier) ? 'outlier' : '';
+                return (<div className={`sales-calendar-cell level-${cell.quintile} ${selected} ${outlier}`} key={key} onClick={(e)=>this.selectDay(e,cell)}></div>)
             }
             else
                 return <div className='sales-calendar-cell empty-cell' key={key}></div>
@@ -121,6 +125,12 @@ class SalesCalendar extends Component {
     }
 
     render() {
+
+      if (!this.props.dailyPattern)
+        return null;
+        
+      this.setupHeatmap();
+
       return (
         <div className="SalesCalendar">
             {this.renderMonths()}
@@ -140,17 +150,17 @@ class SalesCalendar extends Component {
       );
     }
 
-
     selectDay(e,cell){
+        console.log(cell);
         const date = new Date(cell.date);
         date.setDate(date.getDate() + 1);
-        this.props.getDailyProfile(cell.date, date.toISOString().split('T')[0])
+        this.props.getDailyProfile(cell.date, date.toISOString().substr(0,10))
         this.setState({...this.state,selection:cell.date});
     }
   }
 
   const mapStateToProps = (state)=>{
-      return {dates: state.dates}
+      return {dailyPattern: state.dailyPattern}
   }
 
 export default connect(mapStateToProps,{getDailyProfile})(SalesCalendar);

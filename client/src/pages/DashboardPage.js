@@ -61,7 +61,7 @@ const DashboardPage = props => {
         <div className="grid-cell-6">
           <div className="widget">
             <div className='widget-title'>PERFIL DIARIO</div>
-            <DailyProfileChart id='dailyProfile' height='140'></DailyProfileChart>
+            <DailyProfileChart id='dailyProfile' height='240'></DailyProfileChart>
           </div>
         </div>
       </div>

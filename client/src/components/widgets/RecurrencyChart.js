@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import './ForecastLineChart.scss';
+import './RecurrencyChart.scss';
 import { connect } from 'react-redux';
-import forecast from './forecast.json';
 
 const WEEKDAYS = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
-class ForecastLineChart extends Component {
+class RecurrencyChart extends Component {
   componentWillMount() {
     this.setupData();
     this.margin = { left: 50, right: 20, top: 20, bottom: 30 };
@@ -23,24 +22,27 @@ class ForecastLineChart extends Component {
     this.svgHeight = this.props.height || this.divElement.parentElement.clientHeight;
     this.drawChart();
     this.setState({ data: this.data, current: this.state.current, signature: this.stateSignature + 1 });
-    console.log('MOUN');
     this.resizeListener = this.onResize.bind(this);
     window.addEventListener('resize',this.resizeListener);
   }
 
   componentWillUnmount() {
-    console.log('UNM');
     window.removeEventListener('resize', this.resizeListener);
   }
 
   onResize() {
-    console.log('RESIZING!!!');
     this.resizeChart();
   }
 
   setupData() {
+
+    if (!this.props.dailyRecurrency)
+      return;
+
+    console.log(this.props.dailyRecurrency);
+
     // This must came in props...
-    this.data = forecast;
+    this.data = this.props.dailyRecurrency;
 
     if (typeof this.data[0].date != 'string') return;
 
@@ -76,9 +78,6 @@ class ForecastLineChart extends Component {
 
     this.scaleX = d3.scaleTime().range([0, this.chartWidth]);
 
-    console.log(this.scaleX(), this.scaleY());
-
-
     this.xAxis = d3
       .axisBottom(this.scaleX)
       .ticks(7)
@@ -90,23 +89,27 @@ class ForecastLineChart extends Component {
     this.medianLine = d3
       .line()
       .x(d => this.scaleX(d.date))
-      .y(d => this.scaleY(d.orders))
+      .y(d => this.scaleY(d.recurrent))
       .curve(d3.curveMonotoneX);
     this.forecastLine = d3
       .line()
       .x(d => this.scaleX(d.date))
-      .y(d => this.scaleY(d.forecast))
+      .y(d => this.scaleY(d.seconds))
       .curve(d3.curveMonotoneX);
   }
 
 
   resizeChart(){
 
+    if (!this.props.dailyRecurrency)
+      return;
+
     this.makeCurveFunctions();
 
-    let maxData = d3.max(this.state.data, d => d.orders) || 1;
+    let maxData = d3.max(this.props.dailyRecurrency, d => d.seconds) || 1;
+  
     this.scaleY.domain([0, maxData]);
-    //this.scaleX.domain(d3.extent(this.state.data,(d)=>d.date))
+    //this.scaleX.domain(d3.extent(this.props.dailyRecurrency,(d)=>d.date))
     const dateRange = [
       d3.timeParse('%Y-%m-%d')(this.props.dates.start),
       d3.timeParse('%Y-%m-%d')(this.props.dates.end)
@@ -138,6 +141,11 @@ class ForecastLineChart extends Component {
   }
 
   drawChart() {
+
+    if (!this.props.dailyRecurrency)
+      return;
+
+
     this.makeCurveFunctions();
 
     const svg = d3
@@ -182,7 +190,7 @@ class ForecastLineChart extends Component {
     let path = svg
       .select('g.path')
       .selectAll('.median-line')
-      .data([this.state.data]);
+      .data([this.props.dailyRecurrency]);
 
     path
       .enter()
@@ -194,7 +202,7 @@ class ForecastLineChart extends Component {
     let path2 = svg
       .select('g.forecast')
       .selectAll('.forecast-line')
-      .data([this.state.data]);
+      .data([this.props.dailyRecurrency]);
 
     path2
       .enter()
@@ -209,12 +217,19 @@ class ForecastLineChart extends Component {
   }
 
   updateChart() {
+
+    if (!this.props.dailyRecurrency)
+      return;
+
+    if (!this.svg)
+      this.drawChart();
+  
     if (this.stateSignature === this.state.signature && this.dates === this.props.dates) return;
 
     this.stateSignature = this.state.signature;
     this.dates = this.props.dates;
 
-    let maxData = d3.max(this.state.data, d => d.orders) || 1;
+    let maxData = d3.max(this.props.dailyRecurrency, d => d.recurrent) || 1;
 
     this.scaleY.domain([0, maxData]);
     const dateRange = [
@@ -236,10 +251,10 @@ class ForecastLineChart extends Component {
 
     let initData = [];
 
-    for (let i in this.state.data) {
-      initData[i] = { ...this.state.data[i] };
-      initData[i].orders = 0;
-      initData[i].forecast = 0;
+    for (let i in this.props.dailyRecurrency) {
+      initData[i] = { ...this.props.dailyRecurrency[i] };
+      initData[i].recurrent = 0;
+      initData[i].visits = 0;
     }
 
     let path = this.svg
@@ -261,7 +276,7 @@ class ForecastLineChart extends Component {
     this.svg
       .select('g.markers')
       .selectAll('.point')
-      .data(this.state.data)
+      .data(this.props.dailyRecurrency)
       .exit()
       .remove();
 
@@ -272,12 +287,12 @@ class ForecastLineChart extends Component {
     let path = this.svg
       .select('g.path')
       .selectAll('.median-line')
-      .data([this.state.data]);
+      .data([this.props.dailyRecurrency]);
 
     let path2 = this.svg
       .select('g.forecast')
       .selectAll('.forecast-line')
-      .data([this.state.data]);
+      .data([this.props.dailyRecurrency]);
 
     if (transition){
       path
@@ -303,29 +318,29 @@ class ForecastLineChart extends Component {
     const current = {
       date: d3.timeFormat('%d/%m/%Y')(d.date),
       wday: d3.timeFormat('%w')(d.date),
-      orders: d.orders,
-      forecast: parseFloat(d.forecast).toFixed(2),
+      orders: d.recurrent,
+      forecast: parseFloat(d.visits).toFixed(2),
       sol: d.sol,
       trafico: d.t1
     };
-    this.setState({ data: this.state.data, current: current, signature: this.state.signature });
+    this.setState({ data: this.props.dailyRecurrency, current: current, signature: this.state.signature });
   }
 
   // handleMouseClick(d){
-  //     this.setState({ data: this.state.data.slice(1).slice(-30), current: this.state.current, signature: this.state.signature + 1 });
+  //     this.setState({ data: this.props.dailyRecurrency.slice(1).slice(-30), current: this.state.current, signature: this.state.signature + 1 });
   // }
 
   addMarkers(svg) {
     svg
       .select('g.markers')
       .selectAll('.point')
-      .data(this.state.data)
+      .data(this.props.dailyRecurrency)
       .enter()
       .append('circle')
       .attr('class', 'point')
       .attr('index', (d, i) => i)
       .attr('cx', d => this.scaleX(d.date))
-      .attr('cy', d => this.scaleY(d.orders))
+      .attr('cy', d => this.scaleY(d.recurrent))
       .attr('r', d => 4)
       .attr('clip-path', 'url(#rect-clip' + this.props.id + ')')
       .on('mouseover', d => this.handleMouseOver(d));
@@ -334,14 +349,14 @@ class ForecastLineChart extends Component {
     svg
       .select('g.markers')
       .selectAll('.point')
-      .data(this.state.data)
+      .data(this.props.dailyRecurrency)
       // .transition()
       // .duration(500)
       // .on('start', function() {
       //   d3.select(this).attr('r', 5);
       // })
       .attr('cx', d => this.scaleX(d.date))
-      .attr('cy', d => this.scaleY(d.orders));
+      .attr('cy', d => this.scaleY(d.recurrent));
   }
 
   renderDates = () => (this.props.dates ? this.props.dates.start : '---');
@@ -370,7 +385,7 @@ class ForecastLineChart extends Component {
 }
 
 const mapStateToProps = state => {
-  return { dates: state.dates };
+  return { dates: state.dates, dailyRecurrency: state.dailyRecurrency };
 };
 
-export default connect(mapStateToProps)(ForecastLineChart);
+export default connect(mapStateToProps)(RecurrencyChart);

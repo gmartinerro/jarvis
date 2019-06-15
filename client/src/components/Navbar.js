@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LoginMenu from './LoginMenu';
-import AppLogo from '../AIFR logo.png';
+import AppLogo from '../jarvis-white-no-claim.svg';
 import './Navbar.scss';
 import {Link} from 'react-router-dom';
 
@@ -11,6 +11,7 @@ class Navbar extends Component {
           <img className='logo' src={AppLogo} alt='logo'/>
             <ul className='navbar-options'>
                 <Link to='/'><li>Dashboard</li></Link>
+                <Link to='/customers'><li>Customers</li></Link>
             </ul>
             <LoginMenu/>
         </div>

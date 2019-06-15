@@ -48,7 +48,22 @@ const BigTrends = ({percent}) => {
     )
 }
 
+const BigTime = ({seconds}) => {
+
+  const hours = parseInt(seconds / 3600);
+  const minutes = parseInt((seconds % 3600)/60)
+  
+  return(
+      <div className="BigTime">
+        {hours}<span className='bigtime-units'>h</span>
+        {minutes}<span className='bigtime-units'>m</span>
+      </div>
+    )
+}
+
+
+
 
 export default BigNumber;
-export { BigNumber, BigInt, BigTrends};
+export { BigNumber, BigInt, BigTrends, BigTime};
 

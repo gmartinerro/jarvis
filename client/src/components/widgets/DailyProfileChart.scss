@@ -1,10 +1,7 @@
 @import '../../globals.scss';
 
-
 .DailyProfileChart {
-
     .prediction-chart-current-values {
-
         text-align: left;
         margin-left: 50px;
         width: calc(100% - 70px);
@@ -40,9 +37,7 @@
             margin-right: 10px;
             color: $hlColor;
         }
-
     }
-
 
     .d3-chart {
         .point {
@@ -51,14 +46,34 @@
             stroke-width: 3;
             cursor: pointer;
             transition: stroke 1s;
+            opacity: 0;
+
+            &.outlier {
+                fill: $hlColor;
+                opacity: 1;
+            }
         }
 
         .median-line {
             fill: none;
-            stroke-width: 2;
+            stroke-width: 3;
             stroke: $hlColor;
             cursor: pointer;
         }
-    }
 
+        .pattern-line {
+            fill: none;
+            stroke-width: 3;
+            stroke: magenta;
+            cursor: pointer;
+            stroke-dasharray: 4 4;
+        }
+
+        .bands-line {
+            fill: transparentize($hlColor, 0.95);
+            stroke-width: 2;
+            stroke: transparentize($hlColor, 0.85);
+            cursor: pointer;
+        }
+    }
 }
