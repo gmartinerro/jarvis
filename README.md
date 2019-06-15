@@ -1,6 +1,7 @@
-# Jarvis
+<p align="center">
+  <img src="docs/logo.jpg">
+</p>
 
-[![](docs/logo.jpg)]
 
 ## Introduction
 
