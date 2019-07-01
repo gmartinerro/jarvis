@@ -7,6 +7,7 @@ import onlineDataReducer from './onlineDataReducer';
 import recurrencyDataReducer from './recurrencyDataReducer';
 import rfmReducer from './rfmReducer';
 import dailyPatternReducer from './dailyPatternReducer';
+import dashboardHoursReducer from './dashboardHoursReducer';
 
 export default combineReducers({
     dates: dashboardDatesReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     onlineData: onlineDataReducer,
     dailyRecurrency: recurrencyDataReducer,
     customerList: rfmReducer,
-    dailyPattern: dailyPatternReducer
+    dailyPattern: dailyPatternReducer,
+    hours: dashboardHoursReducer
 });

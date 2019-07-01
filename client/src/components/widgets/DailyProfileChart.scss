@@ -42,14 +42,15 @@
     .d3-chart {
         .point {
             fill: white;
-            stroke: $hlColor;
-            stroke-width: 3;
+            //stroke: $hlColor;
+            stroke-width: 1;
             cursor: pointer;
             transition: stroke 1s;
             opacity: 0;
 
             &.outlier {
-                fill: $hlColor;
+                fill: lighten($outlierColor, 20%);
+                stroke: white;
                 opacity: 1;
             }
         }
@@ -64,16 +65,55 @@
         .pattern-line {
             fill: none;
             stroke-width: 3;
-            stroke: magenta;
+            stroke: transparentize($mainColor, 0.5);
             cursor: pointer;
             stroke-dasharray: 4 4;
         }
 
         .bands-line {
-            fill: transparentize($hlColor, 0.95);
+            fill: transparentize($mainColor, 0.92);
             stroke-width: 2;
-            stroke: transparentize($hlColor, 0.85);
+            stroke: transparentize($mainColor, 0.85);
             cursor: pointer;
+        }
+
+        .secondary-line {
+            fill: none;
+            stroke-width: 4;
+            stroke: transparentize(red, 0.8);
+            cursor: pointer;
+            //stroke-dasharray: 4 4;
+        }
+    }
+
+    &.traffic-false {
+        .d3-chart {
+            .secondary-line {
+                display: none;
+            }
+
+            .axis-right {
+                display: none;
+            }
+        }
+    }
+
+    &.pattern-false {
+        .d3-chart {
+            .bands-line {
+                display: none;
+            }
+
+            .pattern-line {
+                display: none;
+            }
+
+            .point {
+                &.outlier {
+                    display: none;
+                }
+            }
+
         }
     }
 }

@@ -23,6 +23,10 @@ $mainllColor: lighten($mainColor, 50%);
 $maindColor: darken($mainColor, 20%);
 
 $forecastColor: rgba(0, 190, 190, 1);
+$normalValueColor: rgb(0, 40, 80);
+$medianColor:rgb(0, 80, 160);
+$outlierColor: rgb(60, 80, 0);
+
 
 $notificationBackgroundColor: $hldColor;
 $notificationColor: $hllColor;

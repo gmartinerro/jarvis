@@ -17,9 +17,9 @@ $maxWeeks:52;
     }
 }
 
-.SalesCalendar {
+.VerticalCalendar {
 
-    width: 560px;
+    width: 172px;
     margin: 10px auto;
     @include month-offsets;
 
@@ -90,39 +90,48 @@ $maxWeeks:52;
     }
 
 
-    .sales-calendar-months-row {
-        height: $cellSize + 2* $cellMargin;
-        padding: $cellMargin;
-        box-sizing: border-box;
-        text-align: left;
-        margin-left: $cellSize + 4*$cellMargin;
+    .sales-calendar-month {
+        font-size: 11px;
+        display: inline-block;
+        color: $mainColor;
+        width: 30px;
         position: relative;
-
-        .sales-calendar-month {
-            font-size: 11px;
-            display: inline-block;
-            position: absolute;
-            top: 0px;
-            color: $mainColor;
-        }
+        top: -4px;
     }
+
+    // .sales-calendar-months-row {
+    //     height: $cellSize + 2* $cellMargin;
+    //     padding: $cellMargin;
+    //     box-sizing: border-box;
+    //     text-align: left;
+    //     margin-left: $cellSize + 4*$cellMargin;
+    //     position: relative;
+    // }
 
     .sales-calendar-row {
         height: $cellSize + 2* $cellMargin;
         padding: $cellMargin;
         box-sizing: border-box;
         text-align: left;
+        display: block;
+    }
 
-        .sales-calendar-row-wday {
+    .sales-calendar-row-wday {
+        //width: $cellSize;
+        height: $cellSize;
+        font-size: 12px;
+        margin: $cellMargin $cellMargin $cellMargin 30px;
+        box-sizing: border-box;
+        position: relative;
+        top: -2px;
+        color: $mainColor;
+        text-align: left;
+
+        .sales-calendar-wday {
             width: $cellSize;
-            height: $cellSize;
-            font-size: 12px;
-            display: inline-block;
             margin: $cellMargin;
             box-sizing: border-box;
-            position: relative;
-            top: -2px;
-            color: $mainColor;
+            display: inline-block;
             text-align: center;
         }
     }

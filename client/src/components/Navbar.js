@@ -12,6 +12,7 @@ class Navbar extends Component {
             <ul className='navbar-options'>
                 <Link to='/'><li>Dashboard</li></Link>
                 <Link to='/customers'><li>Customers</li></Link>
+                <Link to='/profile'><li>Profile</li></Link>
             </ul>
             <LoginMenu/>
         </div>

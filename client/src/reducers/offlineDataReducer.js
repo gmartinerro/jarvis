@@ -22,7 +22,6 @@ export default (state = null, action) => {
     
             result[1]/=result[0] - result[2];
             result[3]/=result[2];
-            console.log(result)
             return {visits:result[0],seconds:parseInt(result[1]),recurrency:result[2]*100/result[0], seconds_rec:parseInt(result[3])};
 
         default:

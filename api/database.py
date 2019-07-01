@@ -74,7 +74,11 @@ def getDayProfileStats(start, end, weekday):
                 for outlier in cursor:
                     outliers.append(outlier)
 
-        return {"profile": profile, "outliers": outliers}
+
+            cursor.execute(f"SELECT hour, AVG(traffic) FROM hourly_traffic WHERE date >='{start}' AND date <'{end}' GROUP BY hour;")
+            traffic = cursor.fetchall()
+
+        return {"profile": profile, "outliers": outliers, "traffic": traffic}
 
 
 def getHeatmap():
@@ -106,8 +110,7 @@ def getDayTraffic(start, end):
 
     with getConnection() as connection:
         cursor = connection
-        cursor.execute(
-            f"SELECT hour, AVG(traffic) as avg_traffic FROM (SELECT date, hour, SUM(traffic) as traffic from {RAW_TRAFFIC_TABLE}  WHERE date >='"+start+"' AND date <'"+end+"' GROUP BY date, hour ORDER BY hour)k GROUP BY hour;")
+        cursor.execute(f"SELECT hour, AVG(traffic) FROM hourly_traffic WHERE date >='{start}' AND date <'{end}' GROUP BY hour;")
         return cursor.fetchall()
 
 

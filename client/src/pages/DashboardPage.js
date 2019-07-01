@@ -17,16 +17,16 @@ const DashboardPage = props => {
         <div className="grid-cell-12">
           <div className="widget">
             <div className='widget-title'>HISTÓRICO DE VENTAS/PREVISIÓN</div>
-            <ForecastLineChart id='mainForecast' height='200'></ForecastLineChart>
+            <ForecastLineChart id='mainForecast' height='250'></ForecastLineChart>
           </div>
         </div>
-        <div className="grid-cell-3">
+        {/* <div className="grid-cell-3">
           <div className="widget">
             <div className='widget-title'>FACTORES MÁS INFLUYENTES</div>
             <img className='jarvis-icon' src={JarvisIcon} alt='jarvis says...'/>
             <p>¿Sabías que los factores que más influyen en tus ventas son el <b>tráfico de peatones</b>, <b>el día de la semana</b>, y en menor grado <b>el clima</b>?</p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="grid-row half">
@@ -51,7 +51,7 @@ const DashboardPage = props => {
         </div>
       </div>
 
-      <div className="grid-row">
+      {/* <div className="grid-row">
         <div className="grid-cell-6">
           <div className="widget">
             <div className='widget-title'>PERFIL SEMANAL</div>
@@ -64,7 +64,7 @@ const DashboardPage = props => {
             <DailyProfileChart id='dailyProfile' height='240'></DailyProfileChart>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

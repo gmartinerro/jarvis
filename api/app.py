@@ -44,16 +44,30 @@ class DayProfile(Resource):
     def get(self, start, end):
 
         profile = getDayProfile(start, end)
-        traffic = getDayTraffic(start, end)
+        _traffic = getDayTraffic(start, end)
         averageTicket = getAverageTicket(start, end)
 
         response = [0] * 24
+        traffic = [0] * 24
         total = 0
         for hour in profile:
             response[hour[0]] = int(hour[1])
             total += hour[1]
 
-        return {"tickets": response, "dates": {"start": start, "end": end}, "total": str(total), "average": str(averageTicket[0]), "global": str(averageTicket[1])}
+        relTraffic = [0] * 24
+        for hour in _traffic:
+
+            traffic[hour[0]] = float(_traffic[hour[0]][1])
+
+            if hour[0] < 7:
+                relTraffic[hour[0]] = 0
+            else:
+                # relTraffic[hour[0]] = (response[hour[0]]*100 /
+                #                        int(hour[1])) if int(hour[1]) > 0 else 10
+                relTraffic[hour[0]] = (int(hour[1]) /
+                                       response[hour[0]]) if response[hour[0]] > 0 else 100
+
+        return json.loads(json.dumps({"tickets": response, "dates": {"start": start, "end": end}, "total": str(total), "average": str(averageTicket[0]), "global": str(averageTicket[1]), "traffic": relTraffic}, default=JsonEncoder))
 
 
 @api.route('/forecast/<start>/<end>', endpoint='forecast')

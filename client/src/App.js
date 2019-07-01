@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Breadcrumbs from './components/Breadcrumbs';
 import DashboardPage from './pages/DashboardPage';
 import CustomersPage from './pages/CustomersPage';
+import ProfilePage from './pages/ProfilePage';
 import {BrowserRouter, Route, withRouter} from 'react-router-dom';
 
 
@@ -22,6 +23,7 @@ class App extends Component {
           <div className='app-content'>
               <Route path='/' exact component={DashboardPage}></Route>
               <Route path='/customers' component={CustomersPage}></Route>
+              <Route path='/profile' component={ProfilePage}></Route>
           </div>
           <Footer/>
         </BrowserRouter>

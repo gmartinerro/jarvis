@@ -1,5 +1,5 @@
 import api from '../api'
-import {SET_DASHBOARD_DATES, DAILY_ORDERS_PROFILE, DAILY_ORDERS_FORECAST,OFFLINE_DATA, ONLINE_DATA, RECURRENCY_DATA, RFM_DATA,DAILY_ORDERS_PATTERN} from './types'
+import {SET_DASHBOARD_DATES, DAILY_ORDERS_PROFILE, DAILY_ORDERS_FORECAST,OFFLINE_DATA, ONLINE_DATA, RECURRENCY_DATA, RFM_DATA,DAILY_ORDERS_PATTERN,SET_DASHBOARD_HOURS} from './types'
 
 /**
  * Sets the date range to show info in dashboard pages
@@ -12,10 +12,13 @@ export const setCurrentDates = dates =>  (dispatch, getState) => {
     dispatch(getOnlineData(dates.start,dates.end));
     dispatch(getRecurrencyData(dates.start,dates.end));
     dispatch(getCustomerList(0));
-    dispatch(getDailyPattern(dates.start,dates.end));
+    dispatch(getDailyPattern(dates.start,dates.end, dates.wday));
     //dispatch(getForecast(dates.start, dates.end));
 };
 
+export const setCurrentHours = hours => async (dispatch, getState) => {
+    dispatch({ type: SET_DASHBOARD_HOURS, payload: hours });
+};
 
 export const getDailyProfile = (start,end) => async (dispatch, getState) => {
     const response = await api.get(`/dayprofile/${start}/${end}`);
@@ -23,8 +26,14 @@ export const getDailyProfile = (start,end) => async (dispatch, getState) => {
     dispatch({ type: DAILY_ORDERS_PROFILE, payload: payload });
 };
 
-export const getDailyPattern = (start,end) => async (dispatch, getState) => {
-    const response = await api.get(`/daystats/${start}/${end}`);
+export const getDailyPattern = (start,end, wday) => async (dispatch, getState) => {
+    let response;
+
+    if (wday == 7)
+        response = await api.get(`/daystats/${start}/${end}`);
+    else
+        response = await api.get(`/daystats/${start}/${end}/${wday}`);
+    
     let payload = response.data;    
     dispatch({ type: DAILY_ORDERS_PATTERN, payload: payload });
 };
